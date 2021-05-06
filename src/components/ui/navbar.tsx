@@ -17,7 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 import SignInOrSignUp from "../sign_in_and_sign_up"
-import {userBoundery} from "../../interfaces"
+import { userBoundery } from "../../interfaces"
 
 
 const miniDrawerWidth = 60;
@@ -33,22 +33,22 @@ const useStyles = makeStyles((theme: Theme) =>
         flexShrink: 0,
       },
       [theme.breakpoints.up('sm')]: {
-          zIndex:0,
+        zIndex: 0,
         width: miniDrawerWidth,
         flexShrink: 0,
       },
     },
     appBar: {
-        display:"flex",
-        flexDirection:"row",
-        alignItems:"center",
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
       [theme.breakpoints.down('sm')]: {
         width: `100%`,
-        marginLeft:"0px",
+        marginLeft: "0px",
       },
       [theme.breakpoints.up('sm')]: {
         width: `100%`,
-        paddingRight:"5%",
+        paddingRight: "5%",
         marginLeft: miniDrawerWidth,
       },
     },
@@ -61,9 +61,9 @@ const useStyles = makeStyles((theme: Theme) =>
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
-        [theme.breakpoints.up('sm')]:{
-            width:miniDrawerWidth
-        },
+      [theme.breakpoints.up('sm')]: {
+        width: miniDrawerWidth
+      },
     },
     content: {
       flexGrow: 1,
@@ -73,13 +73,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    children: React.ReactNode;
-    user:userBoundery|null;
-    setUser:(user:userBoundery)=>void;
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
+  children: React.ReactNode;
+  user: userBoundery | null;
+  setUser: (user: userBoundery | null) => void;
   window?: () => Window;
 }
 
@@ -100,9 +96,9 @@ export default function ResponsiveDrawer(props: Props) {
       <List>
         {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
           <ListItem button key={text}>
-              <Tooltip title={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              </Tooltip>
+            <Tooltip title={text}>
+              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            </Tooltip>
           </ListItem>
         ))}
       </List>
@@ -110,9 +106,9 @@ export default function ResponsiveDrawer(props: Props) {
       <List>
         {['All mail', 'Trash', 'Spam'].map((text, index) => (
           <ListItem button key={text}>
-              <Tooltip title={text}>
-            <ListItemIcon >{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              </Tooltip>
+            <Tooltip title={text}>
+              <ListItemIcon >{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            </Tooltip>
           </ListItem>
         ))}
       </List>
@@ -159,11 +155,11 @@ export default function ResponsiveDrawer(props: Props) {
           >
             <MenuIcon />
           </IconButton>
-            <Typography style={{fontSize:"1.2rem", fontWeight:600}} noWrap>
-              students enroll system
+          <Typography style={{ fontSize: "1.2rem", fontWeight: 600 }} noWrap>
+            students enroll system
           </Typography>
         </Toolbar>
-            <SignInOrSignUp setUser={props.setUser} /> 
+        <SignInOrSignUp user={props.user} setUser={props.setUser} />
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
@@ -198,7 +194,7 @@ export default function ResponsiveDrawer(props: Props) {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-          {props.children}
+        {props.children}
       </main>
     </div>
   );

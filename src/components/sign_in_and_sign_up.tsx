@@ -13,12 +13,14 @@ import IconButton from '@material-ui/core/IconButton';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import CloseIcon from '@material-ui/icons/Close';
 import { useTheme } from '@material-ui/core/styles';
-import {userBoundery, newUserDetails, Role} from "../interfaces"
+import { userBoundery, newUserDetails, Role } from "../interfaces"
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import constance from "../constance.json"
 import axios from "axios";
 
-interface ResponsiveDialogProps{
-    setUser:(user:userBoundery)=>void
+interface ResponsiveDialogProps {
+  setUser: (user: userBoundery | null) => void
+  user: userBoundery | null
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -37,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     title: {
-        width:"100%",
+      width: "100%",
       margin: 0,
       padding: theme.spacing(2),
     },
@@ -50,22 +52,31 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const signUp = (signUpEmail:string, signUpUserName:string, signUpAvatar:string, cb:Function)=>{
-    const newUser:newUserDetails = {
-        email:signUpEmail,
-        username:signUpUserName,
-        avatar:signUpAvatar,
-        role:Role[Role.PLAYER]
-    }
-    console.log("sending to server: ", newUser)
-    axios.post("http://localhost:8080/twins/users",
-        newUser
-              ).then(res=>{console.log(res)
-              cb(res.data)})
+const handleSignIn = (signUpEmail: string, cb: Function, errorHandler: Function) => {
+  axios.get(`http://localhost:8080/twins/users/login/${constance.space}/${signUpEmail}`).then((res) => {
+    console.log(res);
+    cb(res.data)
+  }).catch((error: Error) => errorHandler(error.name))
 }
 
-export default function ResponsiveDialog({setUser}:ResponsiveDialogProps) {
-    //dialog open/ close
+const signUp = (signUpEmail: string, signUpUserName: string, signUpAvatar: string, cb: Function, errorHandler: Function) => {
+  const newUser: newUserDetails = {
+    email: signUpEmail,
+    username: signUpUserName,
+    avatar: signUpAvatar,
+    role: Role[Role.PLAYER]
+  }
+  console.log("sending to server: ", newUser)
+  axios.post("http://localhost:8080/twins/users",
+    newUser
+  ).then(res => {
+    console.log(res)
+    cb(res.data)
+  }).catch((error: Error) => errorHandler(error.name))
+}
+
+export default function ResponsiveDialog({ setUser, user }: ResponsiveDialogProps) {
+  //dialog open/ close
   const [open, setOpen] = React.useState(false);
   //sign in detailes
   const [signInEmail, setSignInEmail] = React.useState<string>("")
@@ -73,73 +84,141 @@ export default function ResponsiveDialog({setUser}:ResponsiveDialogProps) {
   const [signUpEmail, setSignUpEmail] = React.useState<string>("")
   const [signUpUserName, setSignUpUserName] = React.useState<string>("")
   const [signUpAvatar, setSignUpAvatar] = React.useState<string>("")
+  const [error, setError] = React.useState<string>("")
+  const [loading, setLoading] = React.useState<boolean>(false)
+
+  const matches = useMediaQuery('(min-width:600px)');
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const classes = useStyles();
+
+  const clearAll = () => {
+    setSignUpAvatar("")
+    setSignUpUserName("")
+    setSignUpEmail("")
+    setSignInEmail("")
+  }
+
+  React.useEffect(() => { setError("") }, [signInEmail, signUpEmail, signUpUserName, signUpAvatar])
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
+    clearAll()
     setOpen(false);
   };
 
 
+  const signUpComponents = (
+    <div style={{ flexBasis: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", ...(matches ? { height: "100%" } : { width: "100%" }) }}>
+      <DialogTitle id="responsive-dialog-title">{"Sign Up"}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          Please fill your Email, UserName and Avatar (image url)
+          </DialogContentText>
+      </DialogContent>
+      <span style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", gap: "10px" }} >
+        <TextField style={{ width: "80%", margin: "auto" }} label='Email' value={signUpEmail} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSignUpEmail(e.target.value)} />
+        <TextField style={{ width: "80%", margin: "auto" }} label='username' value={signUpUserName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSignUpUserName(e.target.value)} />
+        <TextField style={{ width: "80%", margin: "auto" }} label='avatar' value={signUpAvatar} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSignUpAvatar(e.target.value)} />
+      </span>
+      <DialogActions>
+        <Button onClick={() => {
+          if (!signUpAvatar || !signUpUserName || !signUpEmail) {
+            setError("Please fill all the fileds")
+            return
+          }
+          setLoading(true)
+          signUp(signUpEmail, signUpUserName, signUpAvatar,
+            (user: userBoundery) => {
+              setUser(user)
+              setLoading(false)
+              handleClose()
+            },
+            (err: string) => {
+              setError(err)
+              setLoading(false)
+            })
+        }} color="primary" autoFocus>
+          Submit
+          </Button>
+      </DialogActions>
+    </div>
+  )
+  const signInComponents = (
+    <div style={{ flexBasis: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", ...(matches ? { height: "100%" } : { width: "100%" }) }}>
+      <MuiDialogTitle className={classes.title} id="responsive-dialog-title">Sign In
+              </MuiDialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          Please fill your Email
+          </DialogContentText>
+        <span style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", gap: "10px" }} >
+          <TextField style={{ width: "80%", margin: "auto" }} label='Email' value={signInEmail} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSignInEmail(e.target.value)} />
+          {matches &&
+            <div style={{ height: "96px" }}>{ }</div>
+          }
+        </span>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => {
+          if (!signInEmail) {
+            setError("Please fill in an Email address")
+            return
+          }
+          setLoading(true)
+          handleSignIn(signInEmail, (user: userBoundery) => {
+            setUser(user);
+            setLoading(false)
+            handleClose()
+          }, (err: string) => {
+            setError(err);
+            setLoading(false)
+          })
+        }} color="primary" autoFocus>
+          Sign In
+          </Button>
+      </DialogActions>
+      {error !== '' && <div style={{ color: "red", margin: "auto", textAlign: "center", width: "100%" }} >{error}</div>}
+    </div>
+  )
+
+
   return (
-      <div style={{marginLeft:"auto"}} >
-        <Button  onClick={handleClickOpen} color="inherit">Login</Button>
+    <div style={{ marginLeft: "auto" }} >
+      {!user ?
+        <Button onClick={handleClickOpen} color="inherit">Login</Button>
+        :
+        <Button onClick={() => setUser(null)} color="inherit">Logout</Button>
+      }
       <Dialog
         fullScreen={fullScreen}
         open={open}
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
-          <Grid className={classes.root}>
-              <MuiDialogTitle className={classes.title} id="responsive-dialog-title">Sign In
-      {handleClose ? (
-          <span style={{marginLeft:"auto"}}>
-          <IconButton style={{marginLeft:"auto"}} aria-label="close" onClick={handleClose}>
-          <CloseIcon />
-        </IconButton>
-          </span>
-      ) : null}
-              </MuiDialogTitle>
-        <DialogContent>
-          <DialogContentText>
-              Please fill your Email
-          </DialogContentText>
-              <span style={{display:"flex", flexDirection:"column", justifyContent:"flex-start", alignItems:"center", gap:"10px"}} >
-            <TextField style={{width:"80%", margin:"auto"}} label='Email' value={signInEmail} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setSignInEmail(e.target.value)}/>
-              </span>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary" autoFocus>
-              Sign In
-          </Button>
-        </DialogActions>
-  <Divider orientation="vertical" flexItem />
-              <DialogTitle id="responsive-dialog-title">{"Sign Up"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-              Please fill your Email, UserName and Avatar (image url)
-          </DialogContentText>
-        </DialogContent>
-              <span style={{display:"flex", flexDirection:"column", justifyContent:"flex-start", alignItems:"center", gap:"10px"}} >
-                  <TextField style={{width:"80%", margin:"auto"}} label='Email' value={signUpEmail} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setSignUpEmail(e.target.value)}/>
-            <TextField style={{width:"80%", margin:"auto"}} label='username' value={signUpUserName} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setSignUpUserName(e.target.value)}/>
-            <TextField style={{width:"80%", margin:"auto"}} label='avatar' value={signUpAvatar} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setSignUpAvatar(e.target.value)}/>
-</span>
-        <DialogActions>
-            <Button onClick={()=>{
-                signUp(signUpEmail, signUpUserName, signUpAvatar, (user:userBoundery)=>{
-                    setUser(user)
-                handleClose()})}} color="primary" autoFocus>
-                Submit
-          </Button>
-        </DialogActions>
-</Grid>
+        {handleClose ? (
+          <IconButton style={{ marginLeft: "auto" }} aria-label="close" onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
+        ) : null}
+        <div className={classes.root} style={{ display: "flex", justifyContent: "center", alignItems: "center", ...(matches ? { flexDirection: "row" } : { flexDirection: "column" }) }}>
+          {!matches
+            ?
+            <>
+              {signInComponents}
+              {matches ? <Divider orientation="vertical" flexItem /> : <Divider orientation="horizontal" />}
+              {signUpComponents}
+            </>
+            : <>
+              {signUpComponents}
+              {matches ? <Divider orientation="vertical" flexItem /> : <Divider orientation="horizontal" />}
+              {signInComponents}
+            </>}
+        </div>
       </Dialog>
     </div>
   );
