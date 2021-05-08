@@ -28,12 +28,7 @@ const Items = ({
         }
     }, [user, setItems]);
 
-    React.useEffect(() => {
-        console.log("component did mount");
-    }, []);
-
     if (!user) {
-        console.log("returned null, this is user: ", user);
         return null;
     }
 

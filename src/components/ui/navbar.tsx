@@ -25,6 +25,7 @@ import SignInOrSignUp from "../sign_in_and_sign_up";
 import { userBoundery } from "../../interfaces";
 import ClassIcon from "@material-ui/icons/Class";
 import { useHistory } from "react-router-dom";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 const miniDrawerWidth = 60;
 
@@ -108,6 +109,18 @@ export default function ResponsiveDrawer(props: Props) {
             : []),
     ];
 
+    const lowerLinks = [
+        ...(props.user
+            ? [
+                  {
+                      label: "profile",
+                      link: "/user",
+                      icon: <AccountCircleIcon />,
+                  },
+              ]
+            : []),
+    ];
+
     const miniDrawer = (
         <div>
             <div className={classes.toolbar} />
@@ -131,16 +144,18 @@ export default function ResponsiveDrawer(props: Props) {
             </List>
             <Divider />
             <List>
-                {["All mail", "Trash", "Spam"].map((text, index) => (
-                    <ListItem button key={text}>
-                        <Tooltip title={text}>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? (
-                                    <InboxIcon />
-                                ) : (
-                                    <MailIcon />
-                                )}
-                            </ListItemIcon>
+                {lowerLinks.map((li) => (
+                    <ListItem
+                        button
+                        onClick={() => {
+                            if (li.link) {
+                                history.push(li.link);
+                            }
+                        }}
+                        key={li.label}
+                    >
+                        <Tooltip title={li.label}>
+                            <ListItemIcon>{li.icon}</ListItemIcon>
                         </Tooltip>
                     </ListItem>
                 ))}
@@ -152,33 +167,37 @@ export default function ResponsiveDrawer(props: Props) {
         <div>
             <Divider />
             <List>
-                {["Inbox", "Starred", "Send email", "Drafts"].map(
-                    (text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? (
-                                    <InboxIcon />
-                                ) : (
-                                    <MailIcon />
-                                )}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    )
-                )}
+                {upperLinks.map((li) => (
+                    <ListItem
+                        button
+                        onClick={() => {
+                            if (li.link) {
+                                history.push(li.link);
+                                handleDrawerToggle();
+                            }
+                        }}
+                        key={li.label}
+                    >
+                        <ListItemIcon>{li.icon}</ListItemIcon>
+                        <ListItemText primary={li.label} />
+                    </ListItem>
+                ))}
             </List>
             <Divider />
             <List>
-                {["All mail", "Trash", "Spam"].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>
-                            {index % 2 === 0 ? (
-                                <InboxIcon />
-                            ) : (
-                                <MailIcon />
-                            )}
-                        </ListItemIcon>
-                        <ListItemText primary={text} />
+                {lowerLinks.map((li) => (
+                    <ListItem
+                        button
+                        onClick={() => {
+                            if (li.link) {
+                                history.push(li.link);
+                                handleDrawerToggle();
+                            }
+                        }}
+                        key={li.label}
+                    >
+                        <ListItemIcon>{li.icon}</ListItemIcon>
+                        <ListItemText primary={li.label} />
                     </ListItem>
                 ))}
             </List>

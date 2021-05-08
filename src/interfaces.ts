@@ -27,7 +27,7 @@ interface userId {
 
 export interface userBoundery {
     userId: userId;
-    role: Role;
+    role: "PLAYER" | "ADMIN" | "MANAGER";
     username: string;
     avatar: string;
 }

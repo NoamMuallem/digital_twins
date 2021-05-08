@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import Navbar from "./components/ui/navbar";
 import Items from "./components/items/item.component";
+import UserProfile from "./components/user_profile/user_profile.component";
 
 function App() {
     const [user, setUser] = useState<userBoundery | null>(null);
@@ -29,6 +30,15 @@ function App() {
                                 items={items}
                                 setItems={setItems}
                                 addItemToState={addItemToState}
+                            />
+                        )}
+                    />
+                    <Route
+                        path="/user"
+                        render={() => (
+                            <UserProfile
+                                user={user}
+                                setUser={setUser}
                             />
                         )}
                     />
