@@ -1,76 +1,72 @@
 //open for changes
-interface itemAttributes{ 
-key1:string, 
-key2:string, 
-key3:Number, 
-key4:boolean 
+interface itemAttributes {
+    [key: string]: any;
 }
 
-interface operationsAttributes{
-    key1:string,
-    key2:{ 
-        key2Subkey1:string 
-    } 
+interface operationsAttributes {
+    [key: string]: any;
 }
 
-export enum Role {"PLAYER", "ADMIN", "MANAGER"}
+export enum Role {
+    "PLAYER",
+    "ADMIN",
+    "MANAGER",
+}
 
-export interface newUserDetails { 
-email:string, 
-role:string, 
-username:string, 
-avatar:string,
-} 
+export interface newUserDetails {
+    email: string;
+    role: string;
+    username: string;
+    avatar: string;
+}
 
-interface userId{
-    space:string,
-    email:string
+interface userId {
+    space: string;
+    email: string;
 }
 
 export interface userBoundery {
-    userId:userId, 
-role:Role, 
-username:string, 
-avatar:string,
+    userId: userId;
+    role: Role;
+    username: string;
+    avatar: string;
 }
 
-interface itemId{
-    space:string,
-    id:string
+interface itemId {
+    space: string;
+    id: string;
 }
 
-export interface ItemBoundary 
-{ 
-itemId?:itemId, 
-type:string, 
-name:string, 
-active:boolean, 
-createdTimestamp?:Date, 
-createdBy?:{ 
-userId:userId 
-}, 
-location?:{ 
-lat:Number, 
-lng:Number 
-}, 
-itemAttributes:itemAttributes 
-} 
-
-interface operationsId{
-    space:string,
-    id:string
+export interface ItemBoundary {
+    itemId?: itemId;
+    type: string;
+    name: string;
+    active: boolean;
+    createdTimestamp?: Date;
+    createdBy?: {
+        userId: userId;
+    };
+    location?: {
+        lat: Number;
+        lng: Number;
+    };
+    itemAttributes: itemAttributes;
 }
 
-export interface OperationBoundary 
-{ 
-operationId:operationsId, 
-type:string, 
-item:{ 
-itemId:itemId 
-}, 
-createdTimestamp?:Date, invokedBy:{ 
-userId:userId 
-}, 
-operationAttributes:operationsAttributes 
-} 
+interface operationsId {
+    space: string;
+    id: string;
+}
 
+export interface OperationBoundary {
+    operationId: operationsId;
+    type: string;
+    item: {
+        itemId: itemId;
+    };
+    createdTimestamp?: Date;
+    invokedBy: {
+        userId: userId;
+    };
+    operationAttributes: operationsAttributes;
+}

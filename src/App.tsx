@@ -1,27 +1,31 @@
-import React, {useState} from 'react';
-import {userBoundery} from "./interfaces"
-import './App.css';
-import Navbar from "./components/ui/navbar"
+import React, { useState } from "react";
+import { userBoundery } from "./interfaces";
+import "./App.css";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+} from "react-router-dom";
+import Navbar from "./components/ui/navbar";
+import Items from "./components/items/item.component";
 
 function App() {
-    const [user, setUser] = useState<userBoundery|null>(null)
+    const [user, setUser] = useState<userBoundery | null>(null);
     return (
         <Navbar user={user} setUser={setUser}>
-            <div>
-                Test
-                {user && 
-                    <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
-                        <span>new user added (you can check in postman admin- get all users)</span>
-                        <span>the username is: {user.username}</span>
-                        <span>the role is: {user.role}</span>
-                        <span>the avatar is: {user.avatar}</span>
-                        <span>the email is: {user.userId.email}</span>
-                        <span>the space is: {user.userId.space}</span>
-                    </div>
-                }
-            </div>
-            </Navbar>
-  );
+            <Router>
+                <Switch>
+                    <Route
+                        exact
+                        path="/items"
+                        render={() => <Items user={user} />}
+                    />
+                    {/*<Route path="/items/:id" render={()=>{user && }} />
+                    <Route path="/new_item" render={()=>{user && }} />*/}
+                </Switch>
+            </Router>
+        </Navbar>
+    );
 }
 
 export default App;
