@@ -18,3 +18,9 @@ export const addItem = (newItem: ItemBoundary, email: string) => {
         newItem
     );
 };
+
+export const getAllUserItems = (email: string) => {
+    return axios.get(
+        `http://localhost:8080/twins/items/${constance.space}/${email}`
+    );
+};

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { userBoundery } from "./interfaces";
+import { ItemBoundary, userBoundery } from "./interfaces";
 import "./App.css";
 import {
     BrowserRouter as Router,
@@ -11,20 +11,32 @@ import Items from "./components/items/item.component";
 
 function App() {
     const [user, setUser] = useState<userBoundery | null>(null);
+    const [items, setItems] = useState<Array<ItemBoundary>>([]);
+
+    const addItemToState = (item: ItemBoundary) => {
+        setItems((ls: Array<ItemBoundary>) => [...ls, item]);
+    };
+
     return (
-        <Navbar user={user} setUser={setUser}>
-            <Router>
+        <Router>
+            <Navbar user={user} setUser={setUser}>
                 <Switch>
                     <Route
-                        exact
                         path="/items"
-                        render={() => <Items user={user} />}
+                        render={() => (
+                            <Items
+                                user={user}
+                                items={items}
+                                setItems={setItems}
+                                addItemToState={addItemToState}
+                            />
+                        )}
                     />
                     {/*<Route path="/items/:id" render={()=>{user && }} />
                     <Route path="/new_item" render={()=>{user && }} />*/}
                 </Switch>
-            </Router>
-        </Navbar>
+            </Navbar>
+        </Router>
     );
 }
 

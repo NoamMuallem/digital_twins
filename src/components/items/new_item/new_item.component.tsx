@@ -9,12 +9,13 @@ import { addItem } from "../../../server_api";
 import { AxiosResponse } from "axios";
 
 export interface NewItemProps {
-    //addItemToState: (item: ItemBoundary) => void;
     user: userBoundery;
+    addItemToState: (item: ItemBoundary) => void;
 }
 
 export default function NewItem({
     user,
+    addItemToState,
 }: NewItemProps): ReactElement {
     const [showForm, setShowForm] = React.useState<boolean>(false);
     const type = useFormInput("", "Type");
@@ -38,7 +39,7 @@ export default function NewItem({
         setLoading(true);
         addItem(newItem, user.userId.email)
             .then((res: AxiosResponse<ItemBoundary>) => {
-                console.log(res.data);
+                addItemToState(res.data);
                 clearFildes();
                 setShowForm(false);
             })
