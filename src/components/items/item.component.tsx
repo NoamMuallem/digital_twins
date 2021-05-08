@@ -14,7 +14,7 @@ const Items = ({ user }: ItemsProps) => {
 
     return (
         <div>
-            <NewItem />
+            <NewItem user={user} />
         </div>
     );
 };

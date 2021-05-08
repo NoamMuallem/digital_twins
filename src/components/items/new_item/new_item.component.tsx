@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import classes from "./new_item.style.module.scss";
-import { ItemBoundary } from "../../../interfaces";
+import { ItemBoundary, userBoundery } from "../../../interfaces";
 import useFormInput from "../../../hooks/form_input.hook";
 import TextField from "@material-ui/core/TextField";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -10,9 +10,12 @@ import { AxiosResponse } from "axios";
 
 export interface NewItemProps {
     //addItemToState: (item: ItemBoundary) => void;
+    user: userBoundery;
 }
 
-export default function NewItem(props: NewItemProps): ReactElement {
+export default function NewItem({
+    user,
+}: NewItemProps): ReactElement {
     const [showForm, setShowForm] = React.useState<boolean>(false);
     const type = useFormInput("", "Type");
     const name = useFormInput("", "Name");
@@ -33,7 +36,7 @@ export default function NewItem(props: NewItemProps): ReactElement {
             },
         };
         setLoading(true);
-        addItem(newItem, "test@test.test")
+        addItem(newItem, user.userId.email)
             .then((res: AxiosResponse<ItemBoundary>) => {
                 console.log(res.data);
                 clearFildes();
