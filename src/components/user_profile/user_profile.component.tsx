@@ -18,16 +18,19 @@ export default function UserProfile({
     user,
     setUser,
 }: UserProfileProps): ReactElement | null {
+    console.log("this is user.role: ", user);
     const space = useFormInput(user?.userId.space || "", "space");
     const email = useFormInput(user?.userId.email || "", "Email");
-    const [role, setRole] = React.useState<string>(
-        user?.role || "PLAYER"
-    );
+    const [role, setRole] = React.useState<
+        "PLAYER" | "MANAGER" | "ADMIN"
+    >(user?.role || "PLAYER");
     const username = useFormInput(user?.username || "", "Username");
     const avatar = useFormInput(user?.avatar || "", "Avatar");
     const [hasChanged, setHasChanged] = React.useState<boolean>(
         false
     );
+    const [error, setError] = React.useState<string>("");
+    const [loading, setLoading] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         if (user) {
@@ -52,21 +55,26 @@ export default function UserProfile({
 
     const updateUser = () => {
         if (user) {
+            setLoading(true);
             const newUserProfile: userBoundery = {
                 userId: {
                     space: space.value.toString(),
                     email: email.value.toString(),
                 },
-                role: "PLAYER",
+                role: role,
                 username: username.value.toString(),
                 avatar: avatar.value.toString(),
             };
-            updateUserProfile(user.userId.email, newUserProfile).then(
-                () => {
+            updateUserProfile(user.userId.email, newUserProfile)
+                .then(() => {
                     setUser(newUserProfile);
                     setHasChanged(false);
-                }
-            );
+                })
+                .catch((e: Error) => {
+                    setError(e.name);
+                    console.log(e.name);
+                });
+            setLoading(false);
         }
     };
 
@@ -120,6 +128,7 @@ export default function UserProfile({
                 {...avatar}
                 style={{ width: "100%", maxWidth: "400px" }}
             />
+            {error !== "" && <p>{error}</p>}
             {hasChanged && (
                 <button
                     onClick={() => {
