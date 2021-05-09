@@ -20,32 +20,34 @@ function App() {
 
     return (
         <Router>
-            <Navbar user={user} setUser={setUser}>
-                <Switch>
-                    <Route
-                        path="/items"
-                        render={() => (
-                            <Items
-                                user={user}
-                                items={items}
-                                setItems={setItems}
-                                addItemToState={addItemToState}
-                            />
-                        )}
-                    />
-                    <Route
-                        path="/user"
-                        render={() => (
-                            <UserProfile
-                                user={user}
-                                setUser={setUser}
-                            />
-                        )}
-                    />
-                    {/*<Route path="/items/:id" render={()=>{user && }} />
+            <div className="content">
+                <Navbar user={user} setUser={setUser}>
+                    <Switch>
+                        <Route
+                            path="/items"
+                            render={() => (
+                                <Items
+                                    user={user}
+                                    items={items}
+                                    setItems={setItems}
+                                    addItemToState={addItemToState}
+                                />
+                            )}
+                        />
+                        <Route
+                            path="/user"
+                            render={() => (
+                                <UserProfile
+                                    user={user}
+                                    setUser={setUser}
+                                />
+                            )}
+                        />
+                        {/*<Route path="/items/:id" render={()=>{user && }} />
                     <Route path="/new_item" render={()=>{user && }} />*/}
-                </Switch>
-            </Navbar>
+                    </Switch>
+                </Navbar>
+            </div>
         </Router>
     );
 }

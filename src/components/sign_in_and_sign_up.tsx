@@ -1,13 +1,12 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
+import Button from "./ui/button";
 import Dialog from "@material-ui/core/Dialog";
-import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import TextField from "@material-ui/core/TextField";
+import TextField from "./ui/textFiled";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -19,10 +18,10 @@ import {
     Theme,
     createStyles,
 } from "@material-ui/core/styles";
-import constance from "../constance.json";
 //import axios from "axios";
 import { signInRequest, signUpRequest } from "../server_api";
 import { AxiosResponse } from "axios";
+import { Button as OriginalButton } from "@material-ui/core";
 
 interface ResponsiveDialogProps {
     setUser: (user: userBoundery | null) => void;
@@ -208,11 +207,8 @@ export default function ResponsiveDialog({
                             signUpAvatar
                         );
                     }}
-                    color="primary"
-                    autoFocus
-                >
-                    Submit
-                </Button>
+                    text="Submit"
+                />
             </DialogActions>
         </div>
     );
@@ -269,13 +265,10 @@ export default function ResponsiveDialog({
                         }
                         handleSignIn();
                     }}
-                    color="primary"
-                    autoFocus
-                >
-                    Sign In
-                </Button>
+                    text="Sign in"
+                />
             </DialogActions>
-            {error !== "" && (
+            {error !== "" && !matches && (
                 <div
                     style={{
                         color: "red",
@@ -293,13 +286,19 @@ export default function ResponsiveDialog({
     return (
         <div style={{ marginLeft: "auto" }}>
             {!user ? (
-                <Button onClick={handleClickOpen} color="inherit">
-                    Login
-                </Button>
+                <OriginalButton
+                    style={{ color: "white" }}
+                    onClick={handleClickOpen}
+                >
+                    Log in
+                </OriginalButton>
             ) : (
-                <Button onClick={() => setUser(null)} color="inherit">
-                    Logout
-                </Button>
+                <OriginalButton
+                    style={{ color: "white" }}
+                    onClick={() => setUser(null)}
+                >
+                    Log out
+                </OriginalButton>
             )}
             <Dialog
                 fullScreen={fullScreen}
@@ -355,6 +354,18 @@ export default function ResponsiveDialog({
                         </>
                     )}
                 </div>
+                {error !== "" && matches && (
+                    <div
+                        style={{
+                            color: "red",
+                            margin: "auto",
+                            textAlign: "center",
+                            width: "100%",
+                        }}
+                    >
+                        {error}
+                    </div>
+                )}
             </Dialog>
         </div>
     );

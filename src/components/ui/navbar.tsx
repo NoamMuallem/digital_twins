@@ -46,6 +46,11 @@ const useStyles = makeStyles((theme: Theme) =>
             },
         },
         appBar: {
+            background:
+                "linear-gradient(38deg, rgba(27,52,69,1) 25%, rgba(27, 52, 69, 0.45) 54%)",
+            boxShadow: "0 8px 32px 0 rgba( 31, 38, 135, 0.37 )",
+            backdropFilter: "blur( 5.0px )",
+            border: "1px solid rgba( 255, 255, 255, 0.18 )",
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
@@ -74,7 +79,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         content: {
             flexGrow: 1,
-            padding: theme.spacing(3),
         },
     })
 );

@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { ItemBoundary, userBoundery } from "../../interfaces";
-import classes from "./items.style.module.scss";
+import classes from "./item.style.module.scss";
 import NewItem from "./new_item/new_item.component";
 import { getAllUserItems } from "../../server_api";
 import { AxiosResponse } from "axios";
@@ -33,12 +33,15 @@ const Items = ({
     }
 
     return (
-        <div>
+        <div className={classes.Page}>
             <NewItem user={user} addItemToState={addItemToState} />
-            <div>
+            <div className={classes.Items}>
                 {items.length > 0 &&
                     items.map((item: ItemBoundary) => (
-                        <div key={item.itemId!.id}>
+                        <div
+                            className={classes.Item}
+                            key={item.itemId!.id}
+                        >
                             <span>{item.name}</span>
                             <span>{item.type}</span>
                         </div>

@@ -1,13 +1,14 @@
 import React, { ReactElement } from "react";
-import { userBoundery, Role } from "../../interfaces";
+import { userBoundery } from "../../interfaces";
 import useFormInput from "../../hooks/form_input.hook";
-import TextField from "@material-ui/core/TextField";
+import TextField from "../ui/textFiled.jsx";
 import { updateUserProfile } from "../../server_api";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import classes from "./user_profile.style.module.scss";
+import Button from "../ui/button";
 
 export interface UserProfileProps {
     user: userBoundery | null;
@@ -18,7 +19,6 @@ export default function UserProfile({
     user,
     setUser,
 }: UserProfileProps): ReactElement | null {
-    console.log("this is user.role: ", user);
     const space = useFormInput(user?.userId.space || "", "space");
     const email = useFormInput(user?.userId.email || "", "Email");
     const [role, setRole] = React.useState<
@@ -83,17 +83,8 @@ export default function UserProfile({
     }
 
     return (
-        <div
-            style={{
-                width: "80%",
-                display: "flex",
-                gap: "1rem",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                margin: "auto",
-            }}
-        >
+        <div className={classes.Form}>
+            <h2>Change user Profile</h2>
             <TextField
                 {...space}
                 style={{ width: "100%", maxWidth: "400px" }}
@@ -130,13 +121,12 @@ export default function UserProfile({
             />
             {error !== "" && <p>{error}</p>}
             {hasChanged && (
-                <button
+                <Button
                     onClick={() => {
                         updateUser();
                     }}
-                >
-                    save changes
-                </button>
+                    text="Save changes"
+                />
             )}
         </div>
     );
