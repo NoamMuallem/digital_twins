@@ -56,13 +56,15 @@ const Items = ({
 
   return (
     <div className={classes.Page}>
+      <div className={classes.Headline}>Manage Courses</div>
+      <div className={classes.Tools} >
       <TextFiled
         value={text}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setText(e.target.value)
         }
       />
-      <NewItem user={user} addItemToState={addItemToState} />
+        <div className={classes.Pagination}>
       <TablePagination
         component="div"
         count={
@@ -74,6 +76,9 @@ const Items = ({
         rowsPerPage={rowsPerPage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
+      </div>
+      <NewItem user={user} addItemToState={addItemToState} />
+      </div>
       <div className={classes.Items}>
         {items.length > 0 &&
           items

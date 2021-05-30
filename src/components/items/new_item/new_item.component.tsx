@@ -5,7 +5,12 @@ import classes from "./new_item.style.module.scss";
 import { ItemBoundary, userBoundery } from "../../../interfaces";
 import TextField from "../../ui/textFiled";
 import Checkbox from "@material-ui/core/Checkbox";
-import { addItem, updateItem, registerToCourse, resignFromCourse } from "../../../server_api";
+import {
+  addItem,
+  updateItem,
+  registerToCourse,
+  resignFromCourse,
+} from "../../../server_api";
 import { AxiosResponse } from "axios";
 import Button from "../../ui/button";
 import Select from "../../ui/select.component.jsx";
@@ -15,9 +20,9 @@ export interface NewItemProps {
   user: userBoundery;
   addItemToState?: (item: ItemBoundary) => void;
   item?: ItemBoundary;
-  index?:number;
-  enrollState?:(item:ItemBoundary)=>void
-  resignState?:(id:string, index:number)=>void
+  index?: number;
+  enrollState?: (item: ItemBoundary) => void;
+  resignState?: (id: string, index: number) => void;
 }
 
 export default function NewItem({
@@ -26,7 +31,7 @@ export default function NewItem({
   item,
   index,
   enrollState,
-resignState
+  resignState,
 }: NewItemProps): ReactElement {
   const type = "Course";
   const [showForm, setShowForm] = React.useState<boolean>(false);
@@ -152,21 +157,21 @@ resignState
     valueNotChanged
   );
 
-  const handleResign = ()=>{
-    resignFromCourse(user.userId.email, item!.itemId!.id).then(()=>{
-      if(resignState){
-resignState(item!.itemId!.id, index!)
+  const handleResign = () => {
+    resignFromCourse(user.userId.email, item!.itemId!.id).then(() => {
+      if (resignState) {
+        resignState(item!.itemId!.id, index!);
       }
-    })
-  }
+    });
+  };
 
-  const handleEnrollToCourse = ()=>{
-    registerToCourse(user.userId.email, item!.itemId!.id).then(()=>{
-      if(enrollState){
-      enrollState(item!)
+  const handleEnrollToCourse = () => {
+    registerToCourse(user.userId.email, item!.itemId!.id).then(() => {
+      if (enrollState) {
+        enrollState(item!);
       }
-    })
-  }
+    });
+  };
 
   const handleSubmit = () => {
     const newItem: ItemBoundary = {
@@ -187,8 +192,8 @@ resignState(item!.itemId!.id, index!)
     addItem(newItem, user.userId.email)
       .then((res: AxiosResponse<ItemBoundary>) => {
         console.log(res);
-        if(addItemToState){
-        addItemToState(res.data);
+        if (addItemToState) {
+          addItemToState(res.data);
         }
         clearFildes();
         setShowForm(false);
@@ -235,7 +240,7 @@ resignState(item!.itemId!.id, index!)
       {!showForm && !item ? (
         <Button onClick={() => setShowForm(true)} text="New" />
       ) : (
-        <div className={classes.Form}>
+        <div className={`${classes.Form} ${user.role === "PLAYER" && classes.Mini}`}>
           {!item && (
             <CancelIcon
               className={classes.Close}
@@ -245,103 +250,115 @@ resignState(item!.itemId!.id, index!)
               }}
             />
           )}
-          <h2>{user.role === "MANAGER"? "Add Course": name}</h2>
+          <h2>{item ? name : "New Course"}</h2>
           <div className={classes.Inputs}>
-            {user.role !== "PLAYER" ?
-            <TextField
-              value={name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setName(e.target.value)
-              }
-            />
-            :<span>{name}</span>}
-            {user.role === "MANAGER" &&
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={active}
-                  onChange={(
-                    e: React.ChangeEvent<HTMLElement>,
-                    checked: boolean
-                  ) => {
-                    setActive(checked);
-                  }}
-                  name="Active"
-                  style={{
-                    color: "rgb(24, 199, 70)",
-                  }}
-                />
-              }
-              label="Active"
-            />
-            }
+            {user.role !== "PLAYER" ? (
+              <TextField
+                label="Course Name"
+                value={name}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setName(e.target.value)
+                }
+              />
+            ) : (
+              <span>{name}</span>
+            )}
+            {user.role === "MANAGER" && (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={active}
+                    onChange={(
+                      e: React.ChangeEvent<HTMLElement>,
+                      checked: boolean
+                    ) => {
+                      setActive(checked);
+                    }}
+                    name="Active"
+                    style={{
+                      color: "rgb(24, 199, 70)",
+                    }}
+                  />
+                }
+                label="Active"
+              />
+            )}
           </div>
           <div className={classes.Scedual}>
-            {user.role === "MANAGER" ?
+            {user.role === "MANAGER" ? (
               <>
-            <Select
-              onChange={setDay}
-              value={day}
-              items={[
-                "Sunday",
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-              ]}
-            />
-            <div className={classes.Time}>
-              <span>From: </span>
-              <TextField
-                type="number"
-                inputProps={{ min: 8, max: 23, step: 1 }}
-                value={startHour}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setStartHour(e.target.value)
-                }
-              />
-              <TextField
-                type="number"
-                inputProps={{ min: 0, max: 50, step: 10 }}
-                value={startMin}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setStartMin(e.target.value)
-                }
-              />
-            </div>
-            <div className={classes.Time}>
-              <span>To: </span>
-              <TextField
-                type="time"
-                inputProps={{ step: 300 }}
-                value={endsHour}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEndsHour(e.target.value)
-                }
-              />
-              <TextField
-                type="number"
-                inputProps={{ min: 0, max: 50, step: 10 }}
-                value={endsMin}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEndsMin(e.target.value)
-                }
-              />
-            </div>
-            <TextField
-              value={classRoom}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setClassRoom(e.target.value)
-              }
-            />
-          </>
-          :<span>{`From :${startHour}:${startMin} To: ${endsHour}:${endsMin} ${day} room:${classRoom}`}</span>}
+                <Select
+                  onChange={setDay}
+                  value={day}
+                  items={[
+                    "Sunday",
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                  ]}
+                />
+                <div className={classes.Time}>
+                  <span>From: </span>
+                  <TextField
+                        type="number"
+                    style={{width:"3ch"}}
+                    InputProps={{ inputProps: { min: 8, max: 23, step:1 } }}
+                    value={startHour}
+                    onChange={(
+                      e: React.ChangeEvent<HTMLInputElement>
+                    ) => setStartHour(e.target.value)}
+                  />
+                  <span>:</span>
+                  <TextField
+                    style={{width:"3ch"}}
+                    type="number"
+                    inputProps={{ inputProps: {min: 0, max: 50, step: 10}}}
+                    value={startMin}
+                    onChange={(
+                      e: React.ChangeEvent<HTMLInputElement>
+                    ) => setStartMin(e.target.value)}
+                  />
+                </div>
+                <div className={classes.Time}>
+                  <span>To: </span>
+                  <TextField
+                    style={{width:"3ch"}}
+                    type="number"
+                    InputProps={{ inputProps: { min: 8, max: 23, step:1 } }}
+                    value={endsHour}
+                    onChange={(
+                      e: React.ChangeEvent<HTMLInputElement>
+                    ) => setEndsHour(e.target.value)}
+                  />
+                  <span>:</span>
+                  <TextField
+                    style={{width:"mch"}}
+                    type="number"
+                    inputProps={{ inputProps: {min: 0, max: 50, step: 10}}}
+                    value={endsMin}
+                    onChange={(
+                      e: React.ChangeEvent<HTMLInputElement>
+                    ) => setEndsMin(e.target.value)}
+                  />
+                </div>
+                <TextField
+                  label="Room"
+                  value={classRoom}
+                  onChange={(
+                    e: React.ChangeEvent<HTMLInputElement>
+                  ) => setClassRoom(e.target.value)}
+                />
+              </>
+            ) : (
+              <span>{`From :${startHour}:${startMin} To: ${endsHour}:${endsMin} ${day} room:${classRoom}`}</span>
+            )}
           </div>
           <div className={classes.Location}>
             {locationLoading ? (
               <div>Loading Location...</div>
-            ) : !long && !lat && !item ? (
+            ) : (!long && !lat) && user.role==="MANAGER" ? (
               <Button
                 onClick={() => {
                   setLocationLoading(true);
@@ -409,10 +426,17 @@ resignState(item!.itemId!.id, index!)
                 text={"Add"}
               />
             )}
-            {enrollState && <Button onClick={()=>{
-              handleEnrollToCourse()
-            }} text={"enroll"}/>}
-            {resignState && <Button onClick={()=>handleResign()} text='Resign' />}
+            {enrollState && (
+              <Button
+                onClick={() => {
+                  handleEnrollToCourse();
+                }}
+                text={"enroll"}
+              />
+            )}
+            {resignState && (
+              <Button onClick={() => handleResign()} text="Resign" />
+            )}
           </div>
         </div>
       )}

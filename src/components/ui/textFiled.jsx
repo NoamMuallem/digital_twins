@@ -20,6 +20,7 @@ const CssTextField = withStyles({
 })(TextField);
 
 const CustomizedInputs = (props) => {
+  console.log(props)
   return (
     <CssTextField
       style={{ ...props.style, color: "white" }}

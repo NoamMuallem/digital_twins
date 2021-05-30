@@ -1,37 +1,56 @@
 .Card {
-    max-width: 500px;
-    height: auto;
-    .Form {
-        background: rgba(255, 255, 255, 0.65);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        padding: 1rem;
-        margin-top: 1rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        .Close {
-            align-self: flex-end;
-            cursor: pointer;
-        }
-        .Inputs {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            > * {
-                flex-basis: 100%;
-            }
-        }
-        .Location {
-        }
-        .Error {
-        }
-        .Submit {
-        }
+  height: auto;
+  font-size:16px;
+  .Form {
+    margin: auto;
+    width: 1300px;
+    background: rgba(255, 255, 255, 0.65);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 1rem;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+    .Close {
+      align-self: flex-end;
+      cursor: pointer;
     }
+    .Inputs {
+    gap:10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      > * {
+        flex-basis: 100%;
+        margin:auto;
+      }
+    }
+    .Scedual {
+    gap:10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      .Time {
+        >*{
+        margin:auto;
+      }
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: cener;
+        gap:5px;
+      }
+    }
+    &.Mini{
+      width:800px;
+    }
+  }
 }

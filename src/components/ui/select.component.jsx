@@ -1,11 +1,11 @@
 import React from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import NativeSelect from "@material-ui/core/NativeSelect";
 import InputBase from "@material-ui/core/InputBase";
+import FormLabel from "@material-ui/core/FormLabel";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 const BootstrapInput = withStyles((theme) => ({
   root: {
@@ -55,20 +55,26 @@ export default function CustomizedSelects({ items, value, onChange }) {
   };
   return (
     <FormControl className={classes.margin}>
-      <InputLabel id="demo-customized-select-label">Day</InputLabel>
-      <Select
-        labelId="demo-customized-select-label"
-        id="demo-customized-select"
-        value={value}
-        onChange={handleChange}
-        input={<BootstrapInput />}
-      >
-        {items.map((item) => (
-          <MenuItem key={item} value={item}>
-            {item}
-          </MenuItem>
-        ))}
-      </Select>
+      <FormControlLabel
+        value="Day"
+        control={
+          <Select
+            style={{ marginLeft: "5px" }}
+            labelId="demo-customized-select-label"
+            value={value}
+            onChange={handleChange}
+            input={<BootstrapInput />}
+          >
+            {items.map((item) => (
+              <MenuItem key={item} value={item}>
+                {item}
+              </MenuItem>
+            ))}
+          </Select>
+        }
+        label="Day"
+        labelPlacement="start"
+      />
     </FormControl>
   );
 }

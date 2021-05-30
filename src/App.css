@@ -1,8 +1,9 @@
 .content {
-    background-image: url("./assets/nikita-kachanovsky-g-YiX8ynmnY-unsplash.jpeg");
-    height: 100vh;
-    height: webkit-fill-available;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  background-image: url("./assets/nikita-kachanovsky-g-YiX8ynmnY-unsplash.jpeg");
+  height: 100vh;
+  height: webkit-fill-available;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow-y: auto;
 }
