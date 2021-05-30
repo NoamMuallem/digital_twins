@@ -57,40 +57,50 @@ const Items = ({
   return (
     <div className={classes.Page}>
       <div className={classes.Headline}>Manage Courses</div>
-      <div className={classes.Tools} >
-      <TextFiled
-        value={text}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setText(e.target.value)
-        }
-      />
+      <div className={classes.Tools}>
+        <TextFiled
+          label="Search"
+          value={text}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setText(e.target.value)
+          }
+        />
         <div className={classes.Pagination}>
-      <TablePagination
-        component="div"
-        count={
-          items.filter((course) => course.name.indexOf(text) !== -1)
-            .length
-        }
-        page={page}
-        onChangePage={handleChangePage}
-        rowsPerPage={rowsPerPage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-      </div>
-      <NewItem user={user} addItemToState={addItemToState} />
+          <TablePagination
+            component="div"
+            count={
+              items.filter(
+                (course) => course.name.indexOf(text) !== -1
+              ).length
+            }
+            page={page}
+            onChangePage={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        </div>
+        <NewItem user={user} addItemToState={addItemToState} />
       </div>
       <div className={classes.Items}>
         {items.length > 0 &&
           items
             .filter((course) => course.name.indexOf(text) !== -1)
-            .map((item: ItemBoundary, index: number) => (
-              <Item
-                item={item}
-                key={item.itemId!.id + index}
-                user={user}
-                addItemToState={addItemToState}
-              />
-            ))}
+            .map((item: ItemBoundary, index: number) => {
+              if (
+                index < page * rowsPerPage ||
+                index > (page + 1) * rowsPerPage
+              ) {
+                return null;
+              }
+              return (
+                <Item
+                  item={item}
+                  key={item.itemId!.id + index}
+                  user={user}
+                  addItemToState={addItemToState}
+                />
+              );
+            })}
       </div>
     </div>
   );

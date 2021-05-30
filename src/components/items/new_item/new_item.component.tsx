@@ -23,6 +23,7 @@ export interface NewItemProps {
   index?: number;
   enrollState?: (item: ItemBoundary) => void;
   resignState?: (id: string, index: number) => void;
+  canEnroll?: boolean;
 }
 
 export default function NewItem({
@@ -32,6 +33,7 @@ export default function NewItem({
   index,
   enrollState,
   resignState,
+  canEnroll,
 }: NewItemProps): ReactElement {
   const type = "Course";
   const [showForm, setShowForm] = React.useState<boolean>(false);
@@ -240,7 +242,11 @@ export default function NewItem({
       {!showForm && !item ? (
         <Button onClick={() => setShowForm(true)} text="New" />
       ) : (
-        <div className={`${classes.Form} ${user.role === "PLAYER" && classes.Mini}`}>
+        <div
+          className={`${classes.Form} ${
+            user.role === "PLAYER" && classes.Mini
+          }`}
+        >
           {!item && (
             <CancelIcon
               className={classes.Close}
@@ -302,9 +308,11 @@ export default function NewItem({
                 <div className={classes.Time}>
                   <span>From: </span>
                   <TextField
-                        type="number"
-                    style={{width:"3ch"}}
-                    InputProps={{ inputProps: { min: 8, max: 23, step:1 } }}
+                    type="number"
+                    style={{ width: "3ch" }}
+                    InputProps={{
+                      inputProps: { min: 8, max: 23, step: 1 },
+                    }}
                     value={startHour}
                     onChange={(
                       e: React.ChangeEvent<HTMLInputElement>
@@ -312,9 +320,11 @@ export default function NewItem({
                   />
                   <span>:</span>
                   <TextField
-                    style={{width:"3ch"}}
+                    style={{ width: "3ch" }}
                     type="number"
-                    inputProps={{ inputProps: {min: 0, max: 50, step: 10}}}
+                    inputProps={{
+                      inputProps: { min: 0, max: 50, step: 10 },
+                    }}
                     value={startMin}
                     onChange={(
                       e: React.ChangeEvent<HTMLInputElement>
@@ -324,9 +334,11 @@ export default function NewItem({
                 <div className={classes.Time}>
                   <span>To: </span>
                   <TextField
-                    style={{width:"3ch"}}
+                    style={{ width: "3ch" }}
                     type="number"
-                    InputProps={{ inputProps: { min: 8, max: 23, step:1 } }}
+                    InputProps={{
+                      inputProps: { min: 8, max: 23, step: 1 },
+                    }}
                     value={endsHour}
                     onChange={(
                       e: React.ChangeEvent<HTMLInputElement>
@@ -334,9 +346,11 @@ export default function NewItem({
                   />
                   <span>:</span>
                   <TextField
-                    style={{width:"mch"}}
+                    style={{ width: "mch" }}
                     type="number"
-                    inputProps={{ inputProps: {min: 0, max: 50, step: 10}}}
+                    inputProps={{
+                      inputProps: { min: 0, max: 50, step: 10 },
+                    }}
                     value={endsMin}
                     onChange={(
                       e: React.ChangeEvent<HTMLInputElement>
@@ -358,7 +372,7 @@ export default function NewItem({
           <div className={classes.Location}>
             {locationLoading ? (
               <div>Loading Location...</div>
-            ) : (!long && !lat) && user.role==="MANAGER" ? (
+            ) : !long && !lat && user.role === "MANAGER" ? (
               <Button
                 onClick={() => {
                   setLocationLoading(true);
@@ -426,7 +440,7 @@ export default function NewItem({
                 text={"Add"}
               />
             )}
-            {enrollState && (
+            {enrollState && canEnroll && (
               <Button
                 onClick={() => {
                   handleEnrollToCourse();
