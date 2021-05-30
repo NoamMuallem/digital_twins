@@ -4,7 +4,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import InputBase from "@material-ui/core/InputBase";
-import FormLabel from "@material-ui/core/FormLabel";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 const BootstrapInput = withStyles((theme) => ({
@@ -20,7 +19,10 @@ const BootstrapInput = withStyles((theme) => ({
     border: "1px solid #ced4da",
     fontSize: 16,
     padding: "10px 26px 10px 12px",
-    transition: theme.transitions.create(["border-color", "box-shadow"]),
+    transition: theme.transitions.create([
+      "border-color",
+      "box-shadow",
+    ]),
     // Use the system font instead of the default Roboto font.
     fontFamily: [
       "-apple-system",
@@ -48,7 +50,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CustomizedSelects({ items, value, onChange }) {
+export default function CustomizedSelects({
+  items,
+  value,
+  onChange,
+}) {
   const classes = useStyles();
   const handleChange = (event) => {
     onChange(event.target.value);

@@ -24,6 +24,7 @@ export interface NewItemProps {
   enrollState?: (item: ItemBoundary) => void;
   resignState?: (id: string, index: number) => void;
   canEnroll?: boolean;
+  changeCourseState?: (course: ItemBoundary, index: number) => void;
 }
 
 export default function NewItem({
@@ -34,8 +35,8 @@ export default function NewItem({
   enrollState,
   resignState,
   canEnroll,
+  changeCourseState,
 }: NewItemProps): ReactElement {
-  const type = "Course";
   const [showForm, setShowForm] = React.useState<boolean>(false);
   const [name, setName] = React.useState<string>(
     (item && item.name) || ""
@@ -220,9 +221,11 @@ export default function NewItem({
         day,
       },
     };
-    updateItem(user.userId!.email, newItem).then(() =>
-      console.log("updated")
-    );
+    updateItem(user.userId!.email, newItem).then(() => {
+      if (changeCourseState) {
+        changeCourseState(item!, index!);
+      }
+    });
   };
 
   React.useEffect(() => {

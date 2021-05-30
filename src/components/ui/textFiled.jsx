@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 
@@ -20,7 +19,6 @@ const CssTextField = withStyles({
 })(TextField);
 
 const CustomizedInputs = (props) => {
-  console.log(props)
   return (
     <CssTextField
       style={{ ...props.style, color: "white" }}

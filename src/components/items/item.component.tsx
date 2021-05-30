@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import { ItemBoundary, userBoundery } from "../../interfaces";
 import classes from "./item.style.module.scss";
 import NewItem from "./new_item/new_item.component";
@@ -13,6 +13,7 @@ export interface ItemsProps {
   items: Array<ItemBoundary>;
   setItems: (items: Array<ItemBoundary>) => void;
   addItemToState: (item: ItemBoundary) => void;
+  changeCourse: (item: ItemBoundary, index: number) => void;
 }
 
 const Items = ({
@@ -20,6 +21,7 @@ const Items = ({
   items,
   setItems,
   addItemToState,
+  changeCourse,
 }: ItemsProps) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -97,6 +99,8 @@ const Items = ({
                   item={item}
                   key={item.itemId!.id + index}
                   user={user}
+                  index={index}
+                  changeCourseState={changeCourse}
                   addItemToState={addItemToState}
                 />
               );

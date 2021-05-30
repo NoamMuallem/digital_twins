@@ -75,6 +75,7 @@ function App() {
                 path="/items"
                 render={() => (
                   <Items
+                    changeCourse={changeCourse}
                     user={user}
                     items={courses}
                     setItems={setCourses}
@@ -88,13 +89,25 @@ function App() {
                 <Route
                   path="/my_courses"
                   render={() => (
-                    <MyCourses user={user}  setEnrolledCourses={setEnrolledCourses} enrolledCourses={enrolledCourses} resignFromCourse={resignFromCourse}/>
+                    <MyCourses
+                      user={user}
+                      setEnrolledCourses={setEnrolledCourses}
+                      enrolledCourses={enrolledCourses}
+                      resignFromCourse={resignFromCourse}
+                    />
                   )}
                 />
                 <Route
                   path="/courses"
                   render={() => (
-                    <Courses courses={courses} setCourses={setCourses} user={user} setEnrolledCourses={setEnrolledCourses} enrolledCourses={enrolledCourses} addEnrollCourse={addEnrollCourse } />
+                    <Courses
+                      courses={courses}
+                      setCourses={setCourses}
+                      user={user}
+                      setEnrolledCourses={setEnrolledCourses}
+                      enrolledCourses={enrolledCourses}
+                      addEnrollCourse={addEnrollCourse}
+                    />
                   )}
                 />
               </>
