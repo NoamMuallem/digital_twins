@@ -346,7 +346,7 @@ export default function NewItem({
                   />
                   <span>:</span>
                   <TextField
-                    style={{ width: "mch" }}
+                    style={{ width: "3ch" }}
                     type="number"
                     inputProps={{
                       inputProps: { min: 0, max: 50, step: 10 },

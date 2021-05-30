@@ -79,8 +79,8 @@ const Items = ({
             onChangeRowsPerPage={handleChangeRowsPerPage}
           />
         </div>
-        <NewItem user={user} addItemToState={addItemToState} />
       </div>
+      <NewItem user={user} addItemToState={addItemToState} />
       <div className={classes.Items}>
         {items.length > 0 &&
           items
