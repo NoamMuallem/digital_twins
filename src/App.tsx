@@ -2,54 +2,108 @@ import React, { useState } from "react";
 import { ItemBoundary, userBoundery } from "./interfaces";
 import "./App.css";
 import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
+  BrowserRouter as Router,
+  Switch,
+  Route,
 } from "react-router-dom";
 import Navbar from "./components/ui/navbar";
 import Items from "./components/items/item.component";
 import UserProfile from "./components/user_profile/user_profile.component";
+import MyCourses from "./components/my_courses/my_courses.component";
+import Courses from "./components/courses/courses.component";
 
 function App() {
-    const [user, setUser] = useState<userBoundery | null>(null);
-    const [items, setItems] = useState<Array<ItemBoundary>>([]);
+  const [user, setUser] = useState<userBoundery | null>(null);
+  const [courses, setCourses] = useState<Array<ItemBoundary>>([]);
+  const [
+    enrolledCourses,
+    setEnrolledCourses,
+  ] = useState<Array<ItemBoundary> | null>(null);
 
-    const addItemToState = (item: ItemBoundary) => {
-        setItems((ls: Array<ItemBoundary>) => [...ls, item]);
-    };
+  const addCourseToState = (item: ItemBoundary) => {
+    setCourses((ls: Array<ItemBoundary>) => [...ls, item]);
+  };
 
-    return (
-        <Router>
-            <div className="content">
-                <Navbar user={user} setUser={setUser}>
-                    <Switch>
-                        <Route
-                            path="/items"
-                            render={() => (
-                                <Items
-                                    user={user}
-                                    items={items}
-                                    setItems={setItems}
-                                    addItemToState={addItemToState}
-                                />
-                            )}
-                        />
-                        <Route
-                            path="/user"
-                            render={() => (
-                                <UserProfile
-                                    user={user}
-                                    setUser={setUser}
-                                />
-                            )}
-                        />
-                        {/*<Route path="/items/:id" render={()=>{user && }} />
-                    <Route path="/new_item" render={()=>{user && }} />*/}
-                    </Switch>
-                </Navbar>
-            </div>
-        </Router>
-    );
+  const changeCourse = (item: ItemBoundary, index: number) => {
+    setCourses((ls) => {
+      if (ls) {
+        const copy = [...ls];
+        copy[index] = item;
+        return copy;
+      } else {
+        return [item];
+      }
+    });
+  };
+
+  const addEnrollCourse = (item: ItemBoundary) => {
+    setEnrolledCourses((ls: Array<ItemBoundary> | null) => {
+      if (ls) {
+        const copy = [...ls, item];
+        return copy;
+      } else {
+        return [item];
+      }
+    });
+  };
+
+  const resignFromCourse = (id: string, index: number) => {
+    setEnrolledCourses((ls: Array<ItemBoundary> | null) => {
+      if (ls) {
+        const copy = [...ls];
+        copy.splice(index, 1);
+        return copy;
+      } else {
+        return ls;
+      }
+    });
+  };
+
+  return (
+    <Router>
+      <div className="content">
+        <Navbar user={user} setUser={setUser}>
+          <Switch>
+            <Route
+              path="/user"
+              render={() => (
+                <UserProfile user={user} setUser={setUser} />
+              )}
+            />
+            {user && user.role === "MANAGER" && (
+              <Route
+                path="/items"
+                render={() => (
+                  <Items
+                    user={user}
+                    items={courses}
+                    setItems={setCourses}
+                    addItemToState={addCourseToState}
+                  />
+                )}
+              />
+            )}
+            {user && user.role === "PLAYER" && (
+              <>
+                <Route
+                  path="/my_courses"
+                  render={() => (
+                    <MyCourses user={user}  setEnrolledCourses={setEnrolledCourses} enrolledCourses={enrolledCourses} resignFromCourse={resignFromCourse}/>
+                  )}
+                />
+                <Route
+                  path="/courses"
+                  render={() => (
+                    <Courses courses={courses} setCourses={setCourses} user={user} setEnrolledCourses={setEnrolledCourses} enrolledCourses={enrolledCourses} addEnrollCourse={addEnrollCourse } />
+                  )}
+                />
+              </>
+            )}
+          </Switch>
+        </Navbar>
+      </div>
+    </Router>
+  );
 }
 
 export default App;

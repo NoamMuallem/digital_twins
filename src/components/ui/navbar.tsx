@@ -104,10 +104,22 @@ export default function ResponsiveDrawer(props: Props) {
     const upperLinks = [
         ...(props.user
             ? [
-                  {
+                  {...(props.user.role==="MANAGER")&&{
                       label: "items",
-                      link: "items",
+                      link: "/items",
                       icon: <ClassIcon />,
+                  }
+                  },
+                  {...(props.user.role==="PLAYER")&&{
+                      label: "my courses",
+                      link: "/my_courses",
+                      icon: <ClassIcon />,
+                  }},
+                  {...(props.user.role==="PLAYER")&&{
+                      label: "courses",
+                      link: "/courses",
+                      icon: <ClassIcon />,
+                  }
                   },
               ]
             : []),
@@ -130,7 +142,11 @@ export default function ResponsiveDrawer(props: Props) {
             <div className={classes.toolbar} />
             <Divider />
             <List>
-                {upperLinks.map((li) => (
+                {upperLinks.map((li) => {
+                  if(!li.link || !li.label){
+                    return null
+                  }
+                  return(
                     <ListItem
                         button
                         onClick={() => {
@@ -140,15 +156,19 @@ export default function ResponsiveDrawer(props: Props) {
                         }}
                         key={li.label}
                     >
-                        <Tooltip title={li.label}>
+                        <Tooltip title={li.label!}>
                             <ListItemIcon>{li.icon}</ListItemIcon>
                         </Tooltip>
                     </ListItem>
-                ))}
+                )})}
             </List>
             <Divider />
             <List>
-                {lowerLinks.map((li) => (
+                {lowerLinks.map((li) => {
+                  if(!li.link || !li.label){
+                    return null
+                  }
+                  return(
                     <ListItem
                         button
                         onClick={() => {
@@ -162,7 +182,7 @@ export default function ResponsiveDrawer(props: Props) {
                             <ListItemIcon>{li.icon}</ListItemIcon>
                         </Tooltip>
                     </ListItem>
-                ))}
+                )})}
             </List>
         </div>
     );
@@ -171,7 +191,11 @@ export default function ResponsiveDrawer(props: Props) {
         <div>
             <Divider />
             <List>
-                {upperLinks.map((li) => (
+                {upperLinks.map((li) => {
+                  if(!li.link || !li.label){
+                    return null
+                  }
+                  return(
                     <ListItem
                         button
                         onClick={() => {
@@ -185,7 +209,7 @@ export default function ResponsiveDrawer(props: Props) {
                         <ListItemIcon>{li.icon}</ListItemIcon>
                         <ListItemText primary={li.label} />
                     </ListItem>
-                ))}
+                )})}
             </List>
             <Divider />
             <List>
